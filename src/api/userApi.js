@@ -13,6 +13,15 @@ export async function getUser(id) {
   });
 }
 
+export async function updateUser(id, user) {
+  let token = localStorage.getItem("token");
+  return await api.put(`${Endpoints.users}/${id}`, user, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 export async function signUp(user) {
   return await api.post(Endpoints.users, user);
 }

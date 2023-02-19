@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout";
 import RequireAuth from "./components/RequireAuth";
+import EditUserPage from "./pages/EditUserPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -18,6 +19,14 @@ export default function AppRoutes() {
           element={
             <RequireAuth>
               <UserProfilePage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/users/:id/edit"
+          element={
+            <RequireAuth>
+              <EditUserPage />
             </RequireAuth>
           }
         />

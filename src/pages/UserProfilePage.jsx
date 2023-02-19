@@ -51,7 +51,7 @@ export default function UserProfilePage() {
             </ListItemAvatar>
             <ListItemText primary={user.name} secondary={user.email} />
             <ListItemSecondaryAction>
-              <IconButton component={Link} to="/edit">
+              <IconButton component={Link} to={`/users/${user._id}/edit`}>
                 <Edit />
               </IconButton>
               <IconButton component={Link} to="/edit">

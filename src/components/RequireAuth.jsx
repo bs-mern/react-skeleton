@@ -7,8 +7,9 @@ export default function RequireAuth({ children }) {
 
   let token = localStorage.getItem("token");
 
+  if (token) auth.setLoggedIn(true);
+
   if (token) {
-    auth.setLoggedIn(true);
     return children;
   } else {
     return <Navigate to="/login" state={{ from: location }} replace />;
