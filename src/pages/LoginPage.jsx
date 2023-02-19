@@ -9,51 +9,49 @@ import {
   Box,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { useSnackbar } from "notistack";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { signUp } from "../api/userApi";
+import { useSnackbar } from "notistack";
 
-export default function SignupPage() {
-  const navigate = useNavigate();
+import { login } from "../api/authApi";
+import { useAuth } from "../contexts/authContext";
+
+export default function LoginPage() {
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const auth = useAuth();
+  let location = useLocation();
+  let from = location.state?.from?.pathname || "/";
+
   const [error, setError] = useState("");
   const formik = useFormik({
     initialValues: {
-      name: "",
       email: "",
       password: "",
     },
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       try {
-        const { data } = await signUp(values);
+        const { data } = await login(values);
         setStatus({ success: true });
         setSubmitting(false);
-        enqueueSnackbar(data.message + ". You can now login", {
-          variant: "success",
+        auth.login(data, () => {
+          enqueueSnackbar(`Signed in as ${data.user.name}!`, {
+            variant: "success",
+          });
         });
-        navigate("/login");
+
+        navigate(from, { replace: true });
       } catch (err) {
         const response = err.response.data;
-        setError(response._message);
-        formik.errors.name = response.errors.name?.message;
-        formik.errors.email = response.errors.email?.message;
-        formik.errors.password = response.errors.password?.message;
+        setError(response.error);
         setStatus({ success: false });
         setSubmitting(false);
       }
     },
     validationSchema: Yup.object().shape({
-      name: Yup.string()
-        .min(3, "Name should be at least 3 characters long")
-        .required("Name is required"),
-      email: Yup.string()
-        .email("Invalid email address")
-        .required("Email is required"),
-      password: Yup.string()
-        .min(6, "Password should be at least 6 characters long")
-        .required("Password is required"),
+      email: Yup.string().required("Email is required"),
+      password: Yup.string().required("Password is required"),
     }),
   });
   return (
@@ -66,18 +64,10 @@ export default function SignupPage() {
       <Card sx={{ maxWidth: 350, m: "auto" }}>
         <CardContent sx={{ mx: 1 }}>
           <Typography sx={{ textAlign: "center" }} variant="h5">
-            Sign Up
+            Login
           </Typography>
           <form onSubmit={formik.handleSubmit}>
             <Stack spacing={3} mt={2}>
-              <TextField
-                name="name"
-                label="Name"
-                variant="filled"
-                {...formik.getFieldProps("name")}
-                error={Boolean(formik.touched.name && formik.errors.name)}
-                helperText={formik.touched.name ? formik.errors.name : ""}
-              />
               <TextField
                 type="email"
                 name="email"
@@ -101,7 +91,7 @@ export default function SignupPage() {
                 }
               />
               <Button type="submit" variant="contained" color="primary">
-                Sign Up
+                Login
               </Button>
             </Stack>
           </form>

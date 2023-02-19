@@ -44,7 +44,7 @@ export default function UsersPage() {
         <List dense>
           {users.map((user, i) => {
             return (
-              <ListItemButton component={Link} to="/">
+              <ListItemButton component={Link} to={`/users/${user._id}`}>
                 <ListItemAvatar>
                   <Avatar>
                     <Person />
@@ -52,7 +52,7 @@ export default function UsersPage() {
                 </ListItemAvatar>
                 <ListItemText primary={user.name} />
                 <ListItemSecondaryAction>
-                  <IconButton component={Link} to="/xx">
+                  <IconButton component={Link} to={`/users/${user._id}`}>
                     <ArrowForward />
                   </IconButton>
                 </ListItemSecondaryAction>
