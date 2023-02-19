@@ -5,8 +5,12 @@ export default function RequireAuth({ children }) {
   let auth = useAuth();
   let location = useLocation();
 
-  if (!auth.loggedIn) {
+  let token = localStorage.getItem("token");
+
+  if (token) {
+    auth.setLoggedIn(true);
+    return children;
+  } else {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
-  return children;
 }
