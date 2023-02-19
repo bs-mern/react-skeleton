@@ -1,7 +1,9 @@
 import { ArrowForward, Person } from "@mui/icons-material";
 import {
   Avatar,
+  Box,
   IconButton,
+  LinearProgress,
   List,
   ListItemAvatar,
   ListItemButton,
@@ -34,25 +36,31 @@ export default function UsersPage() {
       <Typography sx={{ p: 2 }} variant="h5">
         All Users
       </Typography>
-      <List dense>
-        {users.map((user, i) => {
-          return (
-            <ListItemButton component={Link} to="/">
-              <ListItemAvatar>
-                <Avatar>
-                  <Person />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={user.name} />
-              <ListItemSecondaryAction>
-                <IconButton component={Link} to="/xx">
-                  <ArrowForward />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItemButton>
-          );
-        })}
-      </List>
+      {loading ? (
+        <Box sx={{ px: 3, py: 4 }}>
+          <LinearProgress />
+        </Box>
+      ) : (
+        <List dense>
+          {users.map((user, i) => {
+            return (
+              <ListItemButton component={Link} to="/">
+                <ListItemAvatar>
+                  <Avatar>
+                    <Person />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={user.name} />
+                <ListItemSecondaryAction>
+                  <IconButton component={Link} to="/xx">
+                    <ArrowForward />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItemButton>
+            );
+          })}
+        </List>
+      )}
     </Paper>
   );
 }
